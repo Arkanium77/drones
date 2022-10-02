@@ -12,8 +12,8 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class OpenAPIConfig {
 
-    private static final String DOCKET = "WAES Technical Assignment: Diff App";
-    private static final String DESC = "An application that calculates the difference between base64 strings. Made as Technical Assignment for WAES";
+    private static final String DOCKET = "MUSALA Technical Assignment: Drone Dispatcher App";
+    private static final String DESC = "An application for dispatching of cargo drones";
 
     @Bean
     public GroupedOpenApi v1Api() {

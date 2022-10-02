@@ -33,12 +33,6 @@ public class DatabaseConfig {
 
         return primary;
     }
-
-    @Bean
-    public PlatformTransactionManager tnxManager() {
-        return new DataSourceTransactionManager(dataSource());
-    }
-
     @Bean("primaryDataSource")
     @Primary
     @ConfigurationProperties("spring.datasource")

@@ -1,11 +1,13 @@
-package com.musala.drones.domain.application.dto.request;
+package com.musala.drones.domain.application.dto.general;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.musala.drones.domain.application.enums.DroneModel;
 import com.musala.drones.domain.application.enums.DroneState;
-import lombok.Builder;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import lombok.With;
+import lombok.experimental.SuperBuilder;
 import lombok.extern.jackson.Jacksonized;
 
 import javax.validation.constraints.Max;
@@ -16,9 +18,10 @@ import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Positive;
 
 @Data
-@With
+@NoArgsConstructor
+@AllArgsConstructor
 @Jacksonized
-@Builder
+@SuperBuilder(toBuilder = true)
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class DroneDto {
 
@@ -31,18 +34,21 @@ public class DroneDto {
             regexp = "^\\w{1,100}$",
             message = "Must contain only letters, numbers and the underscore character and be no more than one hundred characters long "
     )
-    private final String serialNumber;
+    private String serialNumber;
+
     @NotNull
-    private final DroneModel model;
-    @Max(value = 500)
-    @Positive
+    private DroneModel model;
+
     @NotNull
-    private final Double weightLimit;
-    @Positive
     @Min(value = 0)
-    @Min(value = 100)
+    @Max(value = 500)
+    private Double weightLimit;
+
     @NotNull
-    private final Integer batteryCapacity;
+    @Min(value = 0)
+    @Max(value = 100)
+    private Integer batteryCapacity;
+
     @NotNull
-    private final DroneState state;
+    private DroneState state;
 }

@@ -4,7 +4,7 @@
     <conversionRule conversionWord="wex"
                     converterClass="org.springframework.boot.logging.logback.WhitespaceThrowableProxyConverter"/>
 
-    <property name="project.name" value="diff-app"/>
+    <property name="project.name" value="drone-app"/>
 
     <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
         <encoder>

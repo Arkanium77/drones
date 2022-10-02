@@ -9,8 +9,12 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import java.util.List;
+import java.util.Set;
 
 @Data
 @Entity
@@ -20,7 +24,7 @@ import javax.persistence.Table;
 @Table(name = "drone")
 public class DroneEntity {
 
-    @Id
+    @Id // See solution notes
     @Column(name = "serial_number")
     private String serialNumber;
     @Column(name = "model")
@@ -31,4 +35,7 @@ public class DroneEntity {
     private Integer batteryCapacity;
     @Column(name = "state")
     private DroneState state;
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "drone")
+    private List<LoadEntity> load;
 }

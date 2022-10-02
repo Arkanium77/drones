@@ -23,7 +23,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(value = {Throwable.class})
     public ResponseEntity<ErrorResponse> handleException(Throwable ex, WebRequest req) {
         log.trace("UES caught {} with message {}", ex.getClass().getSimpleName(), ex.getMessage());
-        log.error("DIFF APP Unified Exception System handle and resolve error: ", ex);
+        log.error("DRONE APP Unified Exception System handle and resolve error: ", ex);
         DroneAppException e;
         if (ex instanceof DroneAppException) {
             e = (DroneAppException) ex;
