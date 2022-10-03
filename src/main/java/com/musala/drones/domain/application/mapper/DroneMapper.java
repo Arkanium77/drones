@@ -2,6 +2,7 @@ package com.musala.drones.domain.application.mapper;
 
 import com.musala.drones.domain.application.dto.general.DroneDto;
 import com.musala.drones.domain.application.dto.general.DroneLoadPosition;
+import com.musala.drones.domain.application.dto.request.DronePatchRequest;
 import com.musala.drones.domain.application.dto.response.DroneInfoResponse;
 import com.musala.drones.domain.application.entity.DroneEntity;
 import com.musala.drones.domain.application.entity.LoadEntity;
@@ -12,6 +13,7 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
 import org.mapstruct.Mappings;
+import org.mapstruct.NullValuePropertyMappingStrategy;
 import org.mapstruct.ReportingPolicy;
 
 import java.util.Collection;
@@ -21,7 +23,8 @@ import java.util.stream.Collectors;
 @Mapper(
         unmappedTargetPolicy = ReportingPolicy.IGNORE,
         componentModel = "spring",
-        injectionStrategy = InjectionStrategy.CONSTRUCTOR
+        injectionStrategy = InjectionStrategy.CONSTRUCTOR,
+        nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE
 )
 @RequiredArgsConstructor
 public abstract class DroneMapper {
@@ -72,4 +75,7 @@ public abstract class DroneMapper {
     @Mapping(target = "response.load", ignore = true)
     @Mapping(target = "response.currentWeight", ignore = true)
     public abstract DroneInfoResponse update(@MappingTarget DroneInfoResponse response, DroneEntity drone);
+
+    @Mapping(target = "response.load", ignore = true)
+    public abstract DroneEntity update(@MappingTarget DroneEntity drone, DronePatchRequest request);
 }

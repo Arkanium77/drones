@@ -1,19 +1,20 @@
 package com.musala.drones.domain.application.service;
 
 import com.musala.drones.domain.application.dto.general.DroneDto;
+import com.musala.drones.domain.application.dto.request.DronePatchRequest;
 import com.musala.drones.domain.application.dto.response.DroneInfoResponse;
 import com.musala.drones.domain.application.entity.DroneEntity;
 import com.musala.drones.domain.application.enums.DroneState;
 import com.musala.drones.domain.application.mapper.DroneMapper;
 import com.musala.drones.domain.application.repository.DroneRepository;
 import com.musala.drones.domain.ues.model.exception.ResourceNotFoundDroneAppException;
-import com.musala.drones.domain.ues.model.exception.ValidationDroneAppException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.util.ArrayList;
+import java.util.List;
 
 @Slf4j
 @Service
@@ -22,6 +23,7 @@ public class DroneService {
     private final DroneMapper mapper;
     private final LoadService loadService;
     private final DroneRepository droneRepository;
+    private final ValidationService validationService;
 
     /**
      * Registration of new drone
@@ -72,59 +74,31 @@ public class DroneService {
 
     @Transactional
     public DroneEntity changeState(DroneEntity drone, DroneState state) {
-        checkChanging(drone.getState(), state);
+        validationService.checkState(drone.getState(), state);
         drone.setState(state);
+        validationService.checkDroneCanBeInLoadingState(drone);
         return droneRepository.save(drone);
     }
 
-    public static void checkChanging(DroneState current, DroneState next) {
-        ValidationDroneAppException e = new ValidationDroneAppException("Invalid state change operation. " +
-                "Current state is " + current + ", but next state is " + next);
-        if (current.equals(next)) {
-            return;
-        }
-        switch (current) {
-            case IDLE: {
-                if (!DroneState.LOADING.equals(next)) {
-                    throw e;
-                }
-                return;
-            }
-            case LOADING: {
-                if (!(DroneState.IDLE.equals(next) || DroneState.LOADED.equals(next))) {
-                    throw e;
-                }
-                return;
-            }
-            case LOADED: {
-                if (DroneState.DELIVERED.equals(next) || DroneState.RETURNING.equals(next)) {
-                    throw e;
-                }
-                return;
-            }
-            case DELIVERING: {
-                if (!(DroneState.DELIVERED.equals(next) || DroneState.RETURNING.equals(next))) {
-                    throw e;
-                }
-                return;
-            }
-            case DELIVERED: {
-                if (!DroneState.RETURNING.equals(next)) {
-                    throw e;
-                }
-                return;
-            }
-            case RETURNING: {
-                if (!DroneState.IDLE.equals(next)) {
-                    throw e;
-                }
-            }
-        }
-    }
     @Transactional
     public DroneEntity clearLoad(DroneEntity drone) {
         loadService.deleteLoadByDrone(drone);
         drone.setLoad(new ArrayList<>());
         return drone;
+    }
+
+    @Transactional
+    public DroneEntity patch(String id, DronePatchRequest request) {
+        DroneEntity drone = findById(id);
+        if (request.getState() != null) {
+            validationService.checkState(drone.getState(), request.getState());
+        }
+        drone = mapper.update(drone, request);
+        validationService.checkDroneCanBeInLoadingState(drone);
+        return droneRepository.save(drone);
+    }
+
+    public List<DroneEntity> findAvailableForLoading() {
+        return droneRepository.findAvailableForLoading();
     }
 }

@@ -1,8 +1,12 @@
 package com.musala.drones.domain.ues.model.dto;
 
 import com.musala.drones.domain.ues.model.exception.DroneAppException;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.ToString;
+import lombok.extern.jackson.Jacksonized;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.context.request.ServletWebRequest;
 import org.springframework.web.context.request.WebRequest;
@@ -14,6 +18,9 @@ import java.time.format.DateTimeFormatter;
 @Slf4j
 @Getter
 @ToString
+@Jacksonized
+@Builder
+@AllArgsConstructor
 public class ErrorResponse {
     private final String timestamp;
     private final String path;

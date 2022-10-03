@@ -9,6 +9,8 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
@@ -27,14 +29,16 @@ public class DroneEntity {
     @Id // See solution notes
     @Column(name = "serial_number")
     private String serialNumber;
-    @Column(name = "model")
-    private DroneModel model;
     @Column(name = "weight_limit")
     private Double weightLimit;
     @Column(name = "battery_capacity")
     private Integer batteryCapacity;
     @Column(name = "state")
+    @Enumerated(EnumType.STRING)
     private DroneState state;
+    @Column(name = "model")
+    @Enumerated(EnumType.STRING)
+    private DroneModel model;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "drone")
     private List<LoadEntity> load;

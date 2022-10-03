@@ -2,9 +2,9 @@ package com.musala.drones.domain.application.service;
 
 import com.musala.drones.domain.application.dto.general.DroneDto;
 import com.musala.drones.domain.application.dto.general.DroneLoadPosition;
+import com.musala.drones.domain.application.dto.request.DronePatchRequest;
 import com.musala.drones.domain.application.dto.response.DroneInfoResponse;
 import com.musala.drones.domain.application.entity.DroneEntity;
-import com.musala.drones.domain.application.entity.LoadEntity;
 import com.musala.drones.domain.application.enums.DroneState;
 import com.musala.drones.domain.application.mapper.DroneMapper;
 import com.musala.drones.domain.ues.model.exception.ResourceNotFoundDroneAppException;
@@ -14,7 +14,7 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.util.List;
-import java.util.Set;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -63,4 +63,15 @@ public class DispatchService {
         return droneMapper.update(response, drone);
     }
 
+    @Transactional
+    public DroneInfoResponse patchDrone(String id, DronePatchRequest request) {
+        DroneEntity drone = droneService.patch(id, request);
+        return droneMapper.toResponse(drone);
+    }
+
+    public List<DroneInfoResponse> findAvailableForLoading() {
+        return droneService.findAvailableForLoading().stream()
+                .map(droneMapper::toResponse)
+                .collect(Collectors.toList());
+    }
 }

@@ -2,6 +2,7 @@ package com.musala.drones.controller;
 
 import com.musala.drones.domain.application.dto.general.DroneDto;
 import com.musala.drones.domain.application.dto.general.DroneLoadPosition;
+import com.musala.drones.domain.application.dto.request.DronePatchRequest;
 import com.musala.drones.domain.application.dto.response.DroneInfoResponse;
 import com.musala.drones.domain.application.service.DispatchService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -48,6 +49,20 @@ public class DispatchController {
         return dispatchService.register(request);
     }
 
+    @GetMapping("/available_for_loading")
+    @Operation(
+            summary = "Check drones available for loading",
+            description = "A method of  available drones for loading"
+    )
+    @ApiResponse(
+            responseCode = "200",
+            description = "List of drones available for loading"
+    )
+    @ResponseStatus(value = HttpStatus.OK)
+    public List<DroneInfoResponse> register() {
+        return dispatchService.findAvailableForLoading();
+    }
+
     @GetMapping("/{id}")
     @Operation(
             summary = "Fetch drone info",
@@ -66,6 +81,30 @@ public class DispatchController {
             String id
     ) {
         return dispatchService.fetch(id);
+    }
+
+    @PatchMapping("/{id}")
+    @Operation(
+            summary = "Change drone information",
+            description = "Change individual drone information fields (Leave the fields that do not need to be updated blank)"
+    )
+    @ApiResponse(
+            responseCode = "200",
+            description = "All available info about current drone state"
+    )
+    @ResponseStatus(value = HttpStatus.OK)
+    public DroneInfoResponse register(
+            @PathVariable
+            @NotBlank
+            @Pattern(
+                    regexp = "^\\w{1,100}$",
+                    message = "Id must contain only letters, numbers and the underscore character and be " +
+                            "no more than one hundred characters long "
+            )
+            String id,
+            @RequestBody @Valid DronePatchRequest request
+    ) {
+        return dispatchService.patchDrone(id, request);
     }
 
     @PostMapping("/{id}/load")
