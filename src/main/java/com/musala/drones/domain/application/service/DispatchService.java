@@ -28,7 +28,7 @@ public class DispatchService {
      * Registration of new drone
      *
      * @param request contains all required information for register of new drone
-     * @return response with success status or throws exception
+     * @return all existing information about drone or throws exception
      */
     @Transactional
     public DroneInfoResponse register(DroneDto request) {

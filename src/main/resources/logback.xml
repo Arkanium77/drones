@@ -8,8 +8,7 @@
 
     <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
         <encoder>
-            <pattern>%clr(%d{yyyy-MM-dd HH:mm:ss.SSS}){faint} %clr(%5p) %clr(%5.5marker) %clr(${PID:- }){magenta} %clr(---){faint} %clr([%X{trace.id}/%15.15t]){faint} %clr(%-40.40logger{39}){cyan} %clr(:){faint} %m%n%wex
-            </pattern>
+            <pattern>%clr(%d{yyyy-MM-dd HH:mm:ss.SSS}){faint} %clr(%5p) %clr(%5.5marker) %clr(${PID:- }){magenta} %clr(---){faint} %clr([%X{trace.id}/%15.15t]){faint} %clr(%-40.40logger{39}){cyan} %clr(:){faint} %m%n%wex</pattern>
             <charset>utf8</charset>
         </encoder>
     </appender>
@@ -23,8 +22,21 @@
             <totalSizeCap>20GB</totalSizeCap>
         </rollingPolicy>
         <encoder>
-            <pattern>%clr(%d{yyyy-MM-dd HH:mm:ss.SSS}){faint} %clr(%5p) %clr(%5.5marker) %clr(${PID:- }){magenta} %clr(---){faint} %clr([%X{trace.id}/%15.15t]){faint} %clr(%-40.40logger{39}){cyan} %clr(:){faint} %m%n%wex
-            </pattern>
+            <pattern>%clr(%d{yyyy-MM-dd HH:mm:ss.SSS}){faint} %clr(%5p) %clr(%5.5marker) %clr(${PID:- }){magenta} %clr(---){faint} %clr([%X{trace.id}/%15.15t]){faint} %clr(%-40.40logger{39}){cyan} %clr(:){faint} %m%n%wex</pattern>
+        </encoder>
+    </appender>
+
+    <appender name="AUTOMATIC_BATTERY_STATE_LOGGING_FILE_APPENDER"
+              class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${user.dir}/log/AutomaticBatteryStateLogging.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+            <fileNamePattern>${user.dir}/log/AutomaticBatteryStateLogging-%d{yyyy-MM-dd-HH}.%i.log.zip</fileNamePattern>
+            <maxFileSize>20MB</maxFileSize>
+            <maxHistory>3000</maxHistory>
+            <totalSizeCap>20GB</totalSizeCap>
+        </rollingPolicy>
+        <encoder>
+            <pattern>%clr(%d{yyyy-MM-dd HH:mm:ss.SSS}){faint} %clr(%-40.40logger{39}){cyan} %clr(:){faint} %m%n%wex</pattern>
         </encoder>
     </appender>
 
@@ -35,4 +47,9 @@
     <root level="INFO">
         <appender-ref ref="CONSOLE"/>
     </root>
+
+    <logger name="com.musala.drones.domain.application.service.TaskService" level="DEBUG" additivity="false">
+        <appender-ref ref="AUTOMATIC_BATTERY_STATE_LOGGING_FILE_APPENDER"/>
+    </logger>
+
 </configuration>

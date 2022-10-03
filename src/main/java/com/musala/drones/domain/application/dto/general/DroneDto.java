@@ -6,7 +6,6 @@ import com.musala.drones.domain.application.enums.DroneState;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.With;
 import lombok.experimental.SuperBuilder;
 import lombok.extern.jackson.Jacksonized;
 
@@ -15,7 +14,6 @@ import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
-import javax.validation.constraints.Positive;
 
 @Data
 @NoArgsConstructor
