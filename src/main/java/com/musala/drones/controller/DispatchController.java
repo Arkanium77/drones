@@ -83,6 +83,26 @@ public class DispatchController {
         return dispatchService.fetch(id);
     }
 
+    @GetMapping("/{id}/battery")
+    @Operation(
+            summary = "Fetch drone battery info",
+            description = "A method for fetching drone battery information by id"
+    )
+    @ApiResponse(responseCode = "200", description = "Information about capacity of drone's battery")
+    @ApiResponse(responseCode = "404", description = "When drone not found in system by id")
+    public Integer fetchBattery(
+            @PathVariable
+            @NotBlank
+            @Pattern(
+                    regexp = "^\\w{1,100}$",
+                    message = "Id must contain only letters, numbers and the underscore character and be " +
+                            "no more than one hundred characters long "
+            )
+            String id
+    ) {
+        return dispatchService.fetchBattery(id);
+    }
+
     @PatchMapping("/{id}")
     @Operation(
             summary = "Change drone information",

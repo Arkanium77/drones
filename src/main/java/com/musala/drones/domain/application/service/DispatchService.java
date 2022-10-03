@@ -74,4 +74,8 @@ public class DispatchService {
                 .map(droneMapper::toResponse)
                 .collect(Collectors.toList());
     }
+
+    public Integer fetchBattery(String id) {
+        return fetch(id).getBatteryCapacity();
+    }
 }
